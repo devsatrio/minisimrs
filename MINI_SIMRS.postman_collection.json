@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "7f921b6a-550f-4e91-9927-e3ba41d9a5bd",
+		"name": "MINI_SIMRS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "5784077"
+	},
+	"item": [
+		{
+			"name": "POST PASIEN",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "no_rm",
+							"value": "1115",
+							"type": "text"
+						},
+						{
+							"key": "nama",
+							"value": "bandi",
+							"type": "text"
+						},
+						{
+							"key": "tanggal",
+							"value": "2025-09-09",
+							"type": "text"
+						},
+						{
+							"key": "jk",
+							"value": "Perempuan",
+							"type": "text"
+						},
+						{
+							"key": "alamat",
+							"value": "Gurah",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:8000/api/pasien"
+			},
+			"response": []
+		},
+		{
+			"name": "GET ALL PASIEN",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "GET Detail Pasien",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8000/api/pasien/1"
+			},
+			"response": []
+		}
+	]
+}

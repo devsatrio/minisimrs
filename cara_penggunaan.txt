@@ -1,0 +1,15 @@
+*database
+database = 'db_mini_simrs'
+user = root
+pass =''
+
+*akun login 
+user = superadmin@test.id
+pass = superadmin
+
+*run project
+php artisan serve
+
+
+*API
+cari file MINI_SIMRS.postman_collection.json
