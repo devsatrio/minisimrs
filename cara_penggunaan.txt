@@ -10,6 +10,11 @@ pass = superadmin
 *run project
 php artisan serve
 
+apabila clone dari github jangan lupa "composer install"
+
 
 *API
 cari file MINI_SIMRS.postman_collection.json
+
+*alamat github
+https://github.com/devsatrio/minisimrs
