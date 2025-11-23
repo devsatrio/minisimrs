@@ -41,7 +41,7 @@
 						}
 					]
 				},
-				"url": "http://127.0.0.1:8000/api/pasien"
+				"url": "http://192.168.88.245:8000/api/pasien"
 			},
 			"response": []
 		},
@@ -49,7 +49,8 @@
 			"name": "GET ALL PASIEN",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": "http://192.168.88.245:8000/api/pasien"
 			},
 			"response": []
 		},
@@ -58,7 +59,220 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "http://127.0.0.1:8000/api/pasien/1"
+				"url": "http://192.168.88.245:8000/api/pasien/1"
+			},
+			"response": []
+		},
+		{
+			"name": "login pasien",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "no_rm",
+							"value": "1115",
+							"type": "text"
+						},
+						{
+							"key": "nama",
+							"value": "bandi",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "tanggal",
+							"value": "2025-09-09",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "jk",
+							"value": "Perempuan",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "alamat",
+							"value": "Gurah",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": "http://192.168.88.245:8000/api/login-pasien"
+			},
+			"response": []
+		},
+		{
+			"name": "dokter-by-jadwal",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.88.245:8000/api/dokter-by-jadwal?tgl=2025-11-17&kdpoli=MAT",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"88",
+						"245"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"dokter-by-jadwal"
+					],
+					"query": [
+						{
+							"key": "tgl",
+							"value": "2025-11-17"
+						},
+						{
+							"key": "kdpoli",
+							"value": "MAT"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "jam-praktek-by-jadwal",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.88.245:8000/api/dokter-by-jadwal?tgl=2025-11-17&kdpoli=MAT&kddokter=D01",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"88",
+						"245"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"dokter-by-jadwal"
+					],
+					"query": [
+						{
+							"key": "tgl",
+							"value": "2025-11-17"
+						},
+						{
+							"key": "kdpoli",
+							"value": "MAT"
+						},
+						{
+							"key": "kddokter",
+							"value": "D01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add-kunjungan",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "no_rm",
+							"value": "1113",
+							"type": "text"
+						},
+						{
+							"key": "tanggal",
+							"value": "2025-11-17",
+							"type": "text"
+						},
+						{
+							"key": "jam_praktek",
+							"value": "11:00",
+							"type": "text"
+						},
+						{
+							"key": "dokter",
+							"value": "D01",
+							"type": "text"
+						},
+						{
+							"key": "poli",
+							"value": "MAT",
+							"type": "text"
+						},
+						{
+							"key": "penjamin",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://192.168.88.245:8000/api/add-kunjungan"
+			},
+			"response": []
+		},
+		{
+			"name": "detail-kunjungan",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://192.168.88.245:8000/api/detail-kunjungan/{{kode}}"
+			},
+			"response": []
+		},
+		{
+			"name": "get jadwal dokter",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.88.245:8000/api/jadwal?kdpoli=MAT",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"88",
+						"245"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"jadwal"
+					],
+					"query": [
+						{
+							"key": "kdpoli",
+							"value": "MAT"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get poli",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://192.168.88.245:8000/api/poli"
+			},
+			"response": []
+		},
+		{
+			"name": "list kunjungan",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://192.168.88.245:8000/api/get-kunjungan/{{norm}}"
 			},
 			"response": []
 		}

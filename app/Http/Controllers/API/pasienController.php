@@ -8,6 +8,18 @@ use DB;
 
 class pasienController extends Controller
 {
+
+    public function loginpasien(Request $request) {
+        $data = DB::table('pasien')
+        ->where('no_rm',$request->no_rm)
+        ->get();
+
+        if(count($data)>0){
+        return response()->json(['sts'=>true,'msg' => 'Data retrieved', 'data' => $data]);
+        }else{
+        return response()->json(['sts'=>false,'msg' => 'No. RM Salah']);
+        }
+    }
     
     public function getall() {
         $data=DB::table('pasien')
