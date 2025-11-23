@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 20, 2025 at 06:56 AM
+-- Generation Time: Nov 23, 2025 at 06:13 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -45,7 +45,9 @@ CREATE TABLE `detail_transaksi` (
 INSERT INTO `detail_transaksi` (`id`, `no_transaksi`, `nama_tindakan`, `harga`, `qty`, `subtotal`, `created_at`, `updated_at`) VALUES
 (9, 'TRX000002', 'perban', 1000.00, 1, 1000.00, NULL, NULL),
 (10, 'TRX000002', 'rawat luka', 2000.00, 1, 2000.00, NULL, NULL),
-(11, 'TRX000002', 'new tindakan', 200.00, 4, 800.00, NULL, NULL);
+(11, 'TRX000002', 'new tindakan', 200.00, 4, 800.00, NULL, NULL),
+(12, 'TRX000003', 'perban', 1000.00, 1, 1000.00, NULL, NULL),
+(13, 'TRX000003', 'jait luka', 3000.00, 9, 27000.00, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -57,7 +59,7 @@ CREATE TABLE `dokter` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `kode_dokter` varchar(255) NOT NULL,
   `nama_dokter` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `dokter`
@@ -86,6 +88,33 @@ CREATE TABLE `failed_jobs` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `jadwal_dokter`
+--
+
+CREATE TABLE `jadwal_dokter` (
+  `id` int(11) NOT NULL,
+  `kode_dokter` varchar(50) DEFAULT NULL,
+  `kode_poli` varchar(50) DEFAULT NULL,
+  `hari_praktek` varchar(50) DEFAULT NULL,
+  `jam_prakter` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `jadwal_dokter`
+--
+
+INSERT INTO `jadwal_dokter` (`id`, `kode_dokter`, `kode_poli`, `hari_praktek`, `jam_prakter`) VALUES
+(1, 'D01', 'MAT', 'senin', '08:00'),
+(2, 'D01', 'MAT', 'selasa', '08:00'),
+(3, 'D01', 'MAT', 'rabu', '08:00'),
+(4, 'D01', 'MAT', 'senin', '11:00'),
+(5, 'D02', 'UM', 'jumat', '08:00'),
+(6, 'D02', 'UM', 'selasa', '10:00'),
+(7, 'D02', 'UM', 'rabu', '10:00');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `kunjungan`
 --
 
@@ -94,19 +123,33 @@ CREATE TABLE `kunjungan` (
   `no_registrasikunjungan` varchar(255) NOT NULL,
   `no_rm` varchar(255) NOT NULL,
   `tanggal_kunjungan` date NOT NULL,
+  `jam_kunjungan` varchar(25) DEFAULT NULL,
+  `no_antrian` int(11) DEFAULT NULL,
   `kode_dokter` varchar(255) NOT NULL,
   `poli` varchar(255) NOT NULL,
   `instalasi` varchar(255) NOT NULL,
   `penjamin_id` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `kunjungan`
 --
 
-INSERT INTO `kunjungan` (`id`, `no_registrasikunjungan`, `no_rm`, `tanggal_kunjungan`, `kode_dokter`, `poli`, `instalasi`, `penjamin_id`) VALUES
-(3, 'REG000002', '1115', '2025-11-22', 'D01', 'MAT', 'IGD', '2'),
-(4, 'REG000003', '1111', '2025-11-25', 'D02', 'UM', 'Rawat Inap', '4');
+INSERT INTO `kunjungan` (`id`, `no_registrasikunjungan`, `no_rm`, `tanggal_kunjungan`, `jam_kunjungan`, `no_antrian`, `kode_dokter`, `poli`, `instalasi`, `penjamin_id`) VALUES
+(3, 'REG000002', '1115', '2025-11-22', '09:00', 1, 'D01', 'MAT', 'IGD', '2'),
+(4, 'REG000003', '1111', '2025-11-25', '09:00', 1, 'D02', 'UM', 'Rawat Inap', '4'),
+(5, 'REG000004', '1111', '2025-11-21', '09:00', 1, 'D01', 'UM', 'IGD', '2'),
+(6, 'REG000005', '1115', '2025-11-17', '11:00', 1, 'D01', 'MAT', 'Rawat Jalan', '2'),
+(7, 'REG000006', '1115', '2025-11-17', '11:00', 2, 'D01', 'MAT', 'Rawat Jalan', '2'),
+(8, 'REG000007', '1113', '2025-11-17', '11:00', 3, 'D01', 'MAT', 'Rawat Jalan', '2'),
+(9, 'REG000008', '1115', '2025-11-25', '10:00', 1, 'D02', 'UM', 'Rawat Jalan', '3'),
+(10, 'REG000009', '1115', '2025-11-25', '10:00', 2, 'D02', 'UM', 'Rawat Jalan', '2'),
+(11, 'REG000010', '1115', '2025-11-17', '11:00', 4, 'D01', 'MAT', 'Rawat Jalan', '3'),
+(12, 'REG000011', '1115', '2025-12-01', '11:00', 1, 'D01', 'MAT', 'Rawat Jalan', '3'),
+(13, 'REG000012', '1115', '2025-12-09', '10:00', 1, 'D02', 'UM', 'Rawat Jalan', '2'),
+(14, 'REG000013', '1115', '2025-12-23', '10:00', 1, 'D02', 'UM', 'Rawat Jalan', '2'),
+(15, 'REG000014', '1115', '2025-12-19', '08:00', 1, 'D02', 'UM', 'Rawat Jalan', '1'),
+(16, 'REG000015', '1115', '2025-12-01', '08:00', 1, 'D01', 'MAT', 'Rawat Jalan', '2');
 
 -- --------------------------------------------------------
 
@@ -149,7 +192,7 @@ CREATE TABLE `pasien` (
   `tanggal_lahir` date NOT NULL,
   `jenis_kelamin` varchar(255) NOT NULL,
   `alamat` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `pasien`
@@ -158,7 +201,8 @@ CREATE TABLE `pasien` (
 INSERT INTO `pasien` (`id`, `no_rm`, `nama_pasien`, `tanggal_lahir`, `jenis_kelamin`, `alamat`) VALUES
 (1, '1111', 'test', '2025-11-20', 'Laki - Laki', 'gurah'),
 (2, '1113', '1112', '2025-11-20', 'Laki - Laki', 'gurah'),
-(4, '1115', 'bandi', '2025-09-09', 'Perempuan', 'Gurah');
+(4, '1115', 'bandi', '2025-09-09', 'Perempuan', 'Gurah'),
+(7, '1122', 'bandi', '2025-09-09', 'Perempuan', 'Gurah');
 
 -- --------------------------------------------------------
 
@@ -181,7 +225,7 @@ CREATE TABLE `password_resets` (
 CREATE TABLE `penjamin` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `nama_penjamin` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `penjamin`
@@ -203,7 +247,7 @@ CREATE TABLE `poli` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `kode_poli` varchar(255) NOT NULL,
   `nama_poli` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `poli`
@@ -231,7 +275,8 @@ CREATE TABLE `transaksi` (
 --
 
 INSERT INTO `transaksi` (`id`, `no_transaksi`, `no_registrasikunjungan`, `total_harga`) VALUES
-(2, 'TRX000002', 'REG000003', 3800.00);
+(2, 'TRX000002', 'REG000010', 3800.00),
+(3, 'TRX000003', 'REG000004', 28000.00);
 
 -- --------------------------------------------------------
 
@@ -280,6 +325,12 @@ ALTER TABLE `dokter`
 ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+
+--
+-- Indexes for table `jadwal_dokter`
+--
+ALTER TABLE `jadwal_dokter`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `kunjungan`
@@ -342,7 +393,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `detail_transaksi`
 --
 ALTER TABLE `detail_transaksi`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `dokter`
@@ -357,10 +408,16 @@ ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `jadwal_dokter`
+--
+ALTER TABLE `jadwal_dokter`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `kunjungan`
 --
 ALTER TABLE `kunjungan`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -372,7 +429,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `pasien`
 --
 ALTER TABLE `pasien`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `penjamin`
@@ -390,7 +447,7 @@ ALTER TABLE `poli`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
