@@ -80,6 +80,9 @@
                                     <td>{{ $row->instalasi }}</td>
                                     <td>{{ $row->nama_penjamin }}</td>
                                     <td class="text-center">
+                                        <a href="{{ url('/kunjungan/' . $row->id . '/input-rm') }}" class="btn btn-sm btn-secondary m-1">
+                                            <i class="fas fa-pen"></i>
+                                        </a>
                                         <a href="{{ url('/kunjungan/' . $row->id . '/edit') }}" class="btn btn-sm btn-success m-1">
                                             <i class="fas fa-wrench"></i>
                                         </a>

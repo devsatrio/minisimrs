@@ -103,23 +103,25 @@ class billingController extends Controller
         return $kode;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        $kunjungan =DB::table('kunjungan')
+        ->select('kunjungan.*','pasien.nama_pasien','poli.nama_poli','dokter.nama_dokter','penjamin.nama_penjamin')
+        ->leftjoin('pasien','pasien.no_rm','=','kunjungan.no_rm')
+        ->leftjoin('poli','poli.kode_poli','=','kunjungan.poli')
+        ->leftjoin('dokter','dokter.kode_dokter','=','kunjungan.kode_dokter')
+        ->leftjoin('penjamin','penjamin.id','=','kunjungan.penjamin_id')
+        ->get();
+        $data_detail=[];
+        $data=DB::table('transaksi')->where('id',$id)->first();
+        if($data){
+            $data_detail=DB::table('detail_transaksi')
+            ->where('no_transaksi',$data->no_transaksi)
+            ->get();
+        }
+        return view('billing.show',compact('kunjungan','data','data_detail'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $kunjungan =DB::table('kunjungan')
@@ -139,13 +141,6 @@ class billingController extends Controller
         return view('billing.edit',compact('kunjungan','data','data_detail'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $data=DB::table('transaksi')->where('id',$id)->first();
@@ -182,12 +177,6 @@ class billingController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $data=DB::table('transaksi')->where('id',$id)->first();

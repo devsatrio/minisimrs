@@ -29,16 +29,12 @@ class kunjunganController extends Controller
         }
 
         $data=$data->orderby('id','desc')
-        ->paginate(2);
+        ->paginate(10);
 
         return view('kunjungan.index',compact('data'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    //================================================================================================
     public function create()
     {
         $pasien = DB::table('pasien')->orderby('id','desc')->get();
@@ -49,12 +45,7 @@ class kunjunganController extends Controller
         return view('kunjungan.create',compact('pasien','dokter','poli','penjab'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //================================================================================================
     public function store(Request $request)
     {
         $kode = $this->generatekode();
@@ -90,12 +81,7 @@ class kunjunganController extends Controller
         return $kode;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //================================================================================================
     public function show($id)
     {
         $pasien = DB::table('pasien')->orderby('id','desc')->get();
@@ -115,12 +101,7 @@ class kunjunganController extends Controller
         return view('kunjungan.show',compact('pasien','dokter','poli','penjab','data','data_billing'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //================================================================================================
     public function edit($id)
     {
         $pasien = DB::table('pasien')->orderby('id','desc')->get();
@@ -131,13 +112,7 @@ class kunjunganController extends Controller
         return view('kunjungan.edit',compact('pasien','dokter','poli','penjab','data'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //================================================================================================
     public function update(Request $request, $id)
     {
          DB::table('kunjungan')
@@ -153,18 +128,17 @@ class kunjunganController extends Controller
             return redirect('/kunjungan')->with('status','Berhasil Memperbarui Data');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //================================================================================================
     public function destroy($id)
     {
-        
         DB::table('kunjungan')
         ->where('id',$id)
         ->delete();
-            return redirect('/kunjungan')->with('status','Berhasil Menghapus Data');
+        return redirect('/kunjungan')->with('status','Berhasil Menghapus Data');
+    }
+
+    //================================================================================================
+    public function inputRm($id) {
+        return view('kunjungan.create_rm');
     }
 }

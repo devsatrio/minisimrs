@@ -36,13 +36,13 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label>Tanggal Kunjungan</label>
-                        <input type="date" class="form-control" name="tanggal" required>
+                        <input type="date" class="form-control" name="tanggal" value="{{Date('Y-m-d')}}" required>
                     </div>
                     <div class="form-group">
                         <label>Pasien</label>
                         <select name="pasien" class="form-control">
                             @foreach ($pasien as $row_pasien)
-                                <option value="{{$row_pasien->no_rm}}">{{$row_pasien->nama_pasien}}</option>
+                                <option value="{{$row_pasien->no_rm}}">{{$row_pasien->no_rm}} - {{$row_pasien->nama_pasien}}</option>
                             @endforeach
                         </select>
                     </div>

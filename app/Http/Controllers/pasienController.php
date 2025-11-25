@@ -23,7 +23,7 @@ class pasienController extends Controller
         }
 
         $data=$data->orderby('id','desc')
-        ->paginate(2);
+        ->paginate(20);
 
         return view('pasien.index',compact('data'));
     }

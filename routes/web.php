@@ -23,5 +23,6 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('/pasien',pasienController::class);
+Route::get('/kunjungan/{id}/input-rm',[kunjunganController::class,'inputRm']);
 Route::resource('/kunjungan',kunjunganController::class);
 Route::resource('/billing',billingController::class);

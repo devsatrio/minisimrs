@@ -43,7 +43,7 @@
                         </div>
                         <div class="form-group">
                             <label>Nama</label>
-                            <input type="text" class="form-control" name="nama" value="{{$data->no_rm}}" required>
+                            <input type="text" class="form-control" name="nama" value="{{$data->nama_pasien}}" required>
                         </div>
                         <div class="form-group">
                             <label>Tanggal Lahir</label>
