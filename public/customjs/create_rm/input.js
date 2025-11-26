@@ -2,7 +2,7 @@
 
 var data_odontogram = [
     // Rahang Atas Kanan (Quadrant 1)
-    { nomor_gigi: 18, keterangan: 'sou car' },
+    { nomor_gigi: 18, keterangan: null },
     { nomor_gigi: 17, keterangan: null },
     { nomor_gigi: 16, keterangan: null },
     { nomor_gigi: 15, keterangan: null },
@@ -19,7 +19,7 @@ var data_odontogram = [
     { nomor_gigi: 25, keterangan: null },
     { nomor_gigi: 26, keterangan: null },
     { nomor_gigi: 27, keterangan: null },
-    { nomor_gigi: 28, keterangan: 'met' },
+    { nomor_gigi: 28, keterangan: null },
 
     // Rahang Bawah Kiri (Quadrant 3)
     { nomor_gigi: 38, keterangan: null },
@@ -39,8 +39,62 @@ var data_odontogram = [
     { nomor_gigi: 45, keterangan: null },
     { nomor_gigi: 46, keterangan: null },
     { nomor_gigi: 47, keterangan: null },
-    { nomor_gigi: 48, keterangan: 'test' },
+    { nomor_gigi: 48, keterangan: null },
+
+    { nomor_gigi: 55, keterangan: null },
+    { nomor_gigi: 54, keterangan: null },
+    { nomor_gigi: 53, keterangan: null },
+    { nomor_gigi: 52, keterangan: null },
+    { nomor_gigi: 51, keterangan: null },
+
+    { nomor_gigi: 61, keterangan: null },
+    { nomor_gigi: 62, keterangan: null },
+    { nomor_gigi: 63, keterangan: null },
+    { nomor_gigi: 64, keterangan: null },
+    { nomor_gigi: 65, keterangan: null },
+
+    { nomor_gigi: 85, keterangan: null },
+    { nomor_gigi: 84, keterangan: null },
+    { nomor_gigi: 83, keterangan: null },
+    { nomor_gigi: 82, keterangan: null },
+    { nomor_gigi: 81, keterangan: null },
+
+    { nomor_gigi: 71, keterangan: null },
+    { nomor_gigi: 72, keterangan: null },
+    { nomor_gigi: 73, keterangan: null },
+    { nomor_gigi: 74, keterangan: null },
+    { nomor_gigi: 75, keterangan: null },
 ];
+
+var odontogram_keterangan = [
+    { nomor_aksi: 100, ket_aksi: null },//aksi hapus
+    { nomor_aksi: 1, ket_aksi: 'amf' },
+    { nomor_aksi: 2, ket_aksi: 'cof' },
+    { nomor_aksi: 3, ket_aksi: 'fis' },
+    { nomor_aksi: 4, ket_aksi: 'nvt' },
+    { nomor_aksi: 5, ket_aksi: 'rct' },
+    { nomor_aksi: 6, ket_aksi: 'non' },
+    { nomor_aksi: 7, ket_aksi: 'une' },
+    { nomor_aksi: 8, ket_aksi: 'pre' },
+    { nomor_aksi: 9, ket_aksi: 'uno' },
+    { nomor_aksi: 10, ket_aksi: 'car' },
+    { nomor_aksi: 11, ket_aksi: 'cfr' },
+    { nomor_aksi: 12, ket_aksi: 'fmc' },
+    { nomor_aksi: 13, ket_aksi: 'poc' },
+    { nomor_aksi: 14, ket_aksi: 'rrx' },
+    { nomor_aksi: 15, ket_aksi: 'mis' },
+    { nomor_aksi: 16, ket_aksi: 'ipx' },
+    { nomor_aksi: 17, ket_aksi: 'prd / fld' },
+    { nomor_aksi: 18, ket_aksi: null },
+    { nomor_aksi: 19, ket_aksi: null },
+    { nomor_aksi: 20, ket_aksi: null },
+    { nomor_aksi: 21, ket_aksi: null },
+    { nomor_aksi: 22, ket_aksi: null },
+    { nomor_aksi: 23, ket_aksi: null },
+    { nomor_aksi: 24, ket_aksi: null },
+    { nomor_aksi: 25, ket_aksi: null },
+    { nomor_aksi: 26, ket_aksi: null },
+]
 
 const teethTable = [
     { leftAdult: "11", leftChild: "51", rightChild: "61", rightAdult: "21", hasDoubleInput: true, is_table: 'tabel_satu' },
@@ -62,10 +116,7 @@ const teethTable = [
 ];
 
 $(document).ready(function () {
-    $("#odontogram").odontogram('init', {
-        width: "900px",
-        height: "310px"
-    });
+
 
     init_table();
     init_value_odontogram();
@@ -79,28 +130,22 @@ function init_table() {
             td_table = td_table + '<tr>';
             if (teethTable[index]['leftAdult'] != null) {
                 if (teethTable[index]['leftChild'] != null) {
-                    td_table = td_table + '<td class="p-1">' + teethTable[index]['leftAdult'] + ' [' + teethTable[index]['leftChild'] + ']</td>' +
+                    td_table = td_table + `<td class="text-center" style="width:8%"><button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['leftAdult'] + `')">` + teethTable[index]['leftAdult'] + '</button>' +
+                        `<button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['leftChild'] + `')">[` + teethTable[index]['leftChild'] + ']</button></td>' +
                         '<td class="p-1"><div class="row">' +
-                        '<div class="col-md-6"><div class="input-group mb-2 mr-sm-2">' +
-                        '<div class="input-group-prepend">' +
-                        '<div class="input-group-text">' + teethTable[index]['leftAdult'] + '</div>' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['leftAdult'] + ': </span>' +
+                        '<span class="viewketgigi" id="viewketgigi' + teethTable[index]['leftAdult'] + '"></span>' +
                         '</div>' +
-                        '<input type="text" class="form-control input-gigi" id="inputgigi' + teethTable[index]['leftAdult'] + '" placeholder="Kondisi Gigi ' + teethTable[index]['leftAdult'] + '...">' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['leftChild'] + ': </span>' +
+                        '<span class="viewketgigi" id="viewketgigi' + teethTable[index]['leftChild'] + '"></span>' +
                         '</div></div>' +
-                        '<div class="col-md-6"><div class="input-group mb-2 mr-sm-2">' +
-                        '<div class="input-group-prepend">' +
-                        '<div class="input-group-text">' + teethTable[index]['leftChild'] + '</div>' +
-                        '</div>' +
-                        '<input type="text" class="form-control input-gigi" id="inputgigi' + teethTable[index]['leftChild'] + '" placeholder="Kondisi Gigi ' + teethTable[index]['leftChild'] + '...">' +
-                        '</div></div>' +
-                        '</div>' +
                         '</td>';
                 } else {
-                    td_table = td_table + '<td class="p-1">' + teethTable[index]['leftAdult'] + '</td>' +
+                    td_table = td_table + `<td class="text-center" style="width:8%"><button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['leftAdult'] + `')">` + teethTable[index]['leftAdult'] + '</button></td>' +
                         '<td class="p-1">' +
-                        '<div class="input-group input-group-sm">' +
-                        '<input type="text" class="form-control input-gigi" id="inputgigi' + teethTable[index]['leftAdult'] + '" placeholder="Kondisi Gigi ' + teethTable[index]['leftAdult'] + '...">' +
-                        '</div>' +
+                        '<span class="viewketgigi" id="viewketgigi' + teethTable[index]['leftAdult'] + '"></span>' +
                         '</td>';
                 }
             }
@@ -108,26 +153,20 @@ function init_table() {
             if (teethTable[index]['rightAdult'] != null) {
                 if (teethTable[index]['rightChild'] != null) {
                     td_table = td_table + '<td class="p-1"><div class="row">' +
-                        '<div class="col-md-6"><div class="input-group mb-2 mr-sm-2">' +
-                        '<div class="input-group-prepend">' +
-                        '<div class="input-group-text">' + teethTable[index]['rightChild'] + '</div>' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['rightChild'] + ': </span>' +
+                        '<span class="viewketgigi" id="viewketgigi' + teethTable[index]['rightChild'] + '"></span>' +
                         '</div>' +
-                        '<input type="text" class="form-control input-gigi" id="inputgigi' + teethTable[index]['rightChild'] + '" placeholder="Kondisi Gigi ' + teethTable[index]['rightChild'] + '...">' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['rightAdult'] + ': </span>' +
+                        '<span class="viewketgigi" id="viewketgigi' + teethTable[index]['rightAdult'] + '"></span>' +
                         '</div></div>' +
-                        '<div class="col-md-6"><div class="input-group mb-2 mr-sm-2">' +
-                        '<div class="input-group-prepend">' +
-                        '<div class="input-group-text">' + teethTable[index]['rightAdult'] + '</div>' +
-                        '</div>' +
-                        '<input type="text" class="form-control input-gigi" id="inputgigi' + teethTable[index]['rightAdult'] + '" placeholder="Kondisi Gigi ' + teethTable[index]['rightAdult'] + '...">' +
-                        '</div></div>' +
-                        '</div>' +
-                        '</td><td class="p-1"> [' + teethTable[index]['rightChild'] + '] ' + teethTable[index]['rightAdult'] + '</td>';
+                        `</td><td class="text-center" style="width:8%"><button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['rightChild'] + `')"> [` + teethTable[index]['rightChild'] + `]</button><button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['rightAdult'] + `')">` + teethTable[index]['rightAdult'] + '</button></td>';
                 } else {
                     td_table = td_table + '<td class="p-1">' +
-                        '<div class="input-group input-group-sm">' +
-                        '<input type="text" class="form-control input-gigi" id="inputgigi' + teethTable[index]['rightAdult'] + '" placeholder="Kondisi Gigi ' + teethTable[index]['rightAdult'] + '...">' +
-                        '</div>' +
-                        '</td><td class="p-1">' + teethTable[index]['rightAdult'] + '</td>';
+                        '<span class="viewketgigi" id="viewketgigi' + teethTable[index]['leftAdult'] + '"></span>' +
+                        '</td>' +
+                        `</td><td class="text-center" style="width:8%"><button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['rightAdult'] + `')">` + teethTable[index]['rightAdult'] + '</button></td>';
                 }
             }
             td_table = td_table + '</tr>';
@@ -138,28 +177,22 @@ function init_table() {
             td_table_dua = td_table_dua + '<tr>';
             if (teethTable[index]['leftAdult'] != null) {
                 if (teethTable[index]['leftChild'] != null) {
-                    td_table_dua = td_table_dua + '<td class="p-1">' + teethTable[index]['leftAdult'] + ' [' + teethTable[index]['leftChild'] + ']</td>' +
+                    td_table_dua = td_table_dua + `<td class="text-center" style="width:8%"><button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['leftAdult'] + `')">` + teethTable[index]['leftAdult'] +
+                        `</button><button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['leftChild'] + `')">[` + teethTable[index]['leftChild'] + ']</button></td>' +
                         '<td class="p-1"><div class="row">' +
-                        '<div class="col-md-6"><div class="input-group mb-2 mr-sm-2">' +
-                        '<div class="input-group-prepend">' +
-                        '<div class="input-group-text">' + teethTable[index]['leftAdult'] + '</div>' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['leftAdult'] + ': </span>' +
+                        '<span class="viewketgigi" id="viewketgigi' + teethTable[index]['leftAdult'] + '"></span>' +
                         '</div>' +
-                        '<input type="text" class="form-control input-gigi" id="inputgigi' + teethTable[index]['leftAdult'] + '" placeholder="Kondisi Gigi ' + teethTable[index]['leftAdult'] + '...">' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['leftChild'] + ': </span>' +
+                        '<span class="viewketgigi" id="viewketgigi' + teethTable[index]['leftChild'] + '"></span>' +
                         '</div></div>' +
-                        '<div class="col-md-6"><div class="input-group mb-2 mr-sm-2">' +
-                        '<div class="input-group-prepend">' +
-                        '<div class="input-group-text">' + teethTable[index]['leftChild'] + '</div>' +
-                        '</div>' +
-                        '<input type="text" class="form-control input-gigi" id="inputgigi' + teethTable[index]['leftChild'] + '" placeholder="Kondisi Gigi ' + teethTable[index]['leftChild'] + '...">' +
-                        '</div></div>' +
-                        '</div>' +
                         '</td>';
                 } else {
-                    td_table_dua = td_table_dua + '<td class="p-1">' + teethTable[index]['leftAdult'] + '</td>' +
+                    td_table_dua = td_table_dua + `<td class="text-center" style="width:8%"><button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['leftAdult'] + `')">` + teethTable[index]['leftAdult'] + '</button></td>' +
                         '<td class="p-1">' +
-                        '<div class="input-group input-group-sm">' +
-                        '<input type="text" class="form-control input-gigi" id="inputgigi' + teethTable[index]['leftAdult'] + '" placeholder="Kondisi Gigi ' + teethTable[index]['leftAdult'] + '...">' +
-                        '</div>' +
+                        '<span class="viewketgigi" id="viewketgigi' + teethTable[index]['leftAdult'] + '"></span>' +
                         '</td>';
                 }
             }
@@ -167,26 +200,22 @@ function init_table() {
             if (teethTable[index]['rightAdult'] != null) {
                 if (teethTable[index]['rightChild'] != null) {
                     td_table_dua = td_table_dua + '<td class="p-1"><div class="row">' +
-                        '<div class="col-md-6"><div class="input-group mb-2 mr-sm-2">' +
-                        '<div class="input-group-prepend">' +
-                        '<div class="input-group-text">' + teethTable[index]['rightChild'] + '</div>' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['rightChild'] + ': </span>' +
+                        '<span class="viewketgigi" id="viewketgigi' + teethTable[index]['rightChild'] + '"></span>' +
                         '</div>' +
-                        '<input type="text" class="form-control input-gigi" id="inputgigi' + teethTable[index]['rightChild'] + '" placeholder="Kondisi Gigi ' + teethTable[index]['rightChild'] + '...">' +
-                        '</div></div>' +
-                        '<div class="col-md-6"><div class="input-group mb-2 mr-sm-2">' +
-                        '<div class="input-group-prepend">' +
-                        '<div class="input-group-text">' + teethTable[index]['rightAdult'] + '</div>' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['rightAdult'] + ': </span>' +
+                        '<span class="viewketgigi" id="viewketgigi' + teethTable[index]['rightAdult'] + '"></span>' +
                         '</div>' +
-                        '<input type="text" class="form-control input-gigi" id="inputgigi' + teethTable[index]['rightAdult'] + '" placeholder="Kondisi Gigi ' + teethTable[index]['rightAdult'] + '...">' +
-                        '</div></div>' +
                         '</div>' +
-                        '</td><td class="p-1"> [' + teethTable[index]['rightChild'] + '] ' + teethTable[index]['rightAdult'] + '</td>';
+                        `</td><td class="text-center" style="width:8%"><button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['rightChild'] + `')"> [` + teethTable[index]['rightChild'] +
+                        `]</button> <button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['rightAdult'] + `')">` + teethTable[index]['rightAdult'] + '</button></td>';
                 } else {
                     td_table_dua = td_table_dua + '<td class="p-1">' +
-                        '<div class="input-group input-group-sm">' +
-                        '<input type="text" class="form-control input-gigi" id="inputgigi' + teethTable[index]['rightAdult'] + '" placeholder="Kondisi Gigi ' + teethTable[index]['rightAdult'] + '...">' +
-                        '</div>' +
-                        '</td><td class="p-1">' + teethTable[index]['rightAdult'] + '</td>';
+                        '<span class="viewketgigi" id="viewketgigi' + teethTable[index]['rightAdult'] + '"></span>' +
+                        '</td>' +
+                        `</td><td class="text-center" style="width:8%"><button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['rightAdult'] + `')">` + teethTable[index]['rightAdult'] + '</button></td>';
                 }
             }
             td_table_dua = td_table_dua + '</tr>';
@@ -197,25 +226,203 @@ function init_table() {
 }
 
 function init_value_odontogram() {
-    $('.input-gigi').val('');
+    $('.viewketgigi').html('');
     for (let index = 0; index < data_odontogram.length; index++) {
-        $('#inputgigi' + data_odontogram[index]['nomor_gigi']).val(data_odontogram[index]['keterangan']);
+        $('#viewketgigi' + data_odontogram[index]['nomor_gigi']).html(data_odontogram[index]['keterangan']);
     }
 }
 
-function get_click_action(nomor_gigi,mode) {
-    
+function get_click_action(nomor_gigi, mode) {
+    $('#label_gigi').html(nomor_gigi);
+    var data_gigi = cariGigi(nomor_gigi);
+    var ket_tindakan = cariKetOdontogram(mode);
+    var keterangan = '';
+
+    if (mode != 100) {
+        if (data_gigi.keterangan == null) {
+            if (ket_tindakan.ket_aksi != null) {
+                keterangan = ket_tindakan.ket_aksi;
+            } else {
+                keterangan = '';
+            }
+        } else {
+            if (ket_tindakan.ket_aksi != null) {
+                var final_ket = tambahKata(data_gigi.keterangan, ket_tindakan.ket_aksi);
+                keterangan = final_ket;
+            } else {
+                keterangan = data_gigi.keterangan;
+            }
+        }
+
+        $('#inp-kode-gigi').val(nomor_gigi);
+        $('#inp-keterangan-gigi').val(keterangan);
+        $('#form_ket_odontogram').show();
+        $(".button-action").attr("disabled", true);
+    } else {
+        updateKeteranganGigi(nomor_gigi, null);
+        init_value_odontogram();
+    }
+}
+
+function directEdit(nomor_gigi) {
+    var data_gigi = cariGigi(nomor_gigi);
+    var keterangan = data_gigi.keterangan;
+    $('#mdl-label').html(nomor_gigi);
+    $('#mdl-kode-gigi').val(nomor_gigi);
+    $('#mdl-keterangan-gigi').val(keterangan);
+
+    $('#editgigimodal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+}
+
+function saveKeteranganOdontogram() {
+    var kode_gigi = $('#inp-kode-gigi').val();
+    var keterangan = $('#inp-keterangan-gigi').val();
+    updateKeteranganGigi(kode_gigi, keterangan);
+    closeFormOdontogram();
+    init_value_odontogram();
+}
+
+function saveKeteranganOdontogrammodal() {
+    var kode_gigi = $('#mdl-kode-gigi').val();
+    var keterangan = $('#mdl-keterangan-gigi').val();
+    updateKeteranganGigi(kode_gigi, keterangan);
+    closeFormOdontogram();
+    init_value_odontogram();
+    $('#editgigimodal').modal('toggle');
+}
+
+function updateKeteranganGigi(nomor, kataBaru) {
+    for (let i = 0; i < data_odontogram.length; i++) {
+        if (data_odontogram[i].nomor_gigi == nomor) {
+            data_odontogram[i].keterangan = kataBaru;
+            console.log(data_odontogram[i]);
+            break;
+        }
+    }
 }
 
 
-// $("#odontogram").odontogram('setGeometryByPos', [
-//     { code: 'AMF', pos: '18-R' },
-//     { code: 'AMF', pos: '18-L' },
-//     { code: 'CARIES', pos: '83-L' },
-//     { code: 'POC', pos: '84' },
-// ]);
+function tambahKata(kalimat, kata) {
+    const arr = kalimat.trim().split(/\s+/);
+    const sudahAda = arr.some(k => k.includes(kata));
+    if (sudahAda) {
+        return kalimat.trim();
+    }
+    return (kalimat.trim() + " " + kata).trim();
+}
+
+function cariGigi(nomor) {
+    for (let i = 0; i < data_odontogram.length; i++) {
+        if (data_odontogram[i].nomor_gigi == nomor) {
+            return data_odontogram[i];
+        }
+    }
+    return null; // jika tidak ditemukan
+}
+
+function closeFormOdontogram() {
+    $(".button-action").attr("disabled", false);
+    $('#form_ket_odontogram').hide();
+}
+
+function cariKetOdontogram(nomor) {
+    for (let i = 0; i < odontogram_keterangan.length; i++) {
+        if (odontogram_keterangan[i].nomor_aksi == nomor) {
+            return odontogram_keterangan[i];
+        }
+    }
+    return null;
+}
+$("#odontogram").odontogram('init', {
+    width: "900px",
+    height: "330px"
+});
+
+const savedData = {
+    teeth: [{
+        code: 'AMF',
+        pos: '18-R'
+    },
+    {
+        code: 'CARIES',
+        pos: '84-M'
+    }
+    ],
+    bridges: [{
+        "name": "BRIDGE",
+        "startVert": [{
+            "x": "373.125",
+            "y": "245.625"
+        },
+        {
+            "x": "415",
+            "y": "287.5"
+        }
+        ],
+        "endVert": [{
+            "x": "455",
+            "y": "245.625"
+        },
+        {
+            "x": "496.875",
+            "y": "287.5"
+        }
+        ],
+        "options": {
+            "strokeStyle": "#555"
+        }
+    },
+    {
+        "name": "BRIDGE",
+        "startVert": [
+            {
+                "x": "113.75",
+                "y": "245.625"
+            },
+            {
+                "x": "155.625",
+                "y": "287.5"
+            }
+        ],
+        "endVert": [
+            {
+                "x": "269.375",
+                "y": "245.625"
+            },
+            {
+                "x": "311.25",
+                "y": "287.5"
+            }
+        ],
+        "options": {
+            "strokeStyle": "#555"
+        }
+    }
+    ]
+};
+
+// 1. Ambil instance odontogram
+const odonto = $("#odontogram").data('odontogram');
+
+// 2. Konversi data gigi biasa ke format geometry
+const teethGeometry = odonto.setGeometryByPos(savedData.teeth); // Ini return objek geometry
+
+// 3. Tambahkan bridge sebagai objek literal (bukan instance!)
+// Gunakan key khusus agar tidak bentrok
+if (!teethGeometry["BRIDGES"]) teethGeometry["BRIDGES"] = [];
+for (const bridge of savedData.bridges) {
+    // Pastikan x/y tetap string atau number — tidak masalah karena convertGeomFromObject parse otomatis
+    teethGeometry["BRIDGES"].push(bridge);
+}
+
+// 4. Set SEMUA geometri sekaligus
+$("#odontogram").odontogram('setGeometry', teethGeometry);
+
 $('#odontogram').on('change', function (_, geometry) {
-    console.log(geometry)
+    console.log(geometry);
 })
 
 $("#ODONTOGRAM_MODE_HAPUS").click(function () {

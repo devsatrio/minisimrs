@@ -2531,9 +2531,9 @@ var ODONTOGRAM_MODE_ARROW_BOTTOM_TURN_RIGHT = 26; // BOTTOM-TURN-RIGHT ARROW
 
 
         //custom action
-        console.log(instance);
-        console.log(instance.mode);
-        console.log(pos_teeth);
+        // console.log(instance);
+        // console.log(instance.mode);
+        // console.log(pos_teeth);
         get_click_action(pos_teeth,instance.mode);
         $this.trigger('change', [instance.geometry]);
         instance.redraw();

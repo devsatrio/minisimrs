@@ -45,6 +45,11 @@ class kunjunganController extends Controller
         return view('kunjungan.create',compact('pasien','dokter','poli','penjab'));
     }
 
+    public function blank() {
+        
+        return view('kunjungan.blank');
+    }
+
     //================================================================================================
     public function store(Request $request)
     {
