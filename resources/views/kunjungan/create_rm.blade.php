@@ -405,14 +405,20 @@
                     </div>
                     <div class="tab-pane fade" id="pills-resume-medis" role="tabpanel"
                         aria-labelledby="pills-resume-medis-tab">
+                        <br>
                         <div class="row">
                             <div class="col-md-12" id="resume_medis_view">
-                                <table width="100%" border="1">
+                                <table width="100%" border="0">
                                     <tr>
                                         <td colspan="5" align="center">
                                             <h4>RUMAH SAKIT UMBRELLA CORPORATION</h4>
                                             <span>Jl. Sigura - Gura No.17, Karangbesuki, Kec. Sukun, Racoon City, west
                                                 java</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+
                                             <hr style="border:1px solid #000; margin:5px 0;">
                                         </td>
                                     </tr>
@@ -525,7 +531,7 @@
                                                             occulusi
                                                         </td>
                                                         <td style="vertical-align: top;"> : </td>
-                                                        <td>
+                                                        <td style="vertical-align: top;">
                                                             <span id="rmd_occulusi"></span>
                                                         </td>
                                                     </tr>
@@ -534,7 +540,7 @@
                                                             Torus Palatinus
                                                         </td>
                                                         <td style="vertical-align: top;"> : </td>
-                                                        <td>
+                                                        <td style="vertical-align: top;">
                                                             <span id="rmd_torus_palatinus"></span>
                                                         </td>
                                                     </tr>
@@ -543,7 +549,7 @@
                                                             Torus Madibularis
                                                         </td>
                                                         <td style="vertical-align: top;"> : </td>
-                                                        <td>
+                                                        <td style="vertical-align: top;">
                                                             <span id="rmd_torus_madibularis"></span>
                                                         </td>
                                                     </tr>
@@ -552,7 +558,7 @@
                                                             Palatum
                                                         </td>
                                                         <td style="vertical-align: top;"> : </td>
-                                                        <td>
+                                                        <td style="vertical-align: top;">
                                                             <span id="rmd_palatum"></span>
                                                         </td>
                                                     </tr>
@@ -561,7 +567,7 @@
                                                             Diastema
                                                         </td>
                                                         <td style="vertical-align: top;"> : </td>
-                                                        <td>
+                                                        <td style="vertical-align: top;">
                                                             <span id="rmd_diastema"></span>
                                                         </td>
                                                     </tr>
@@ -570,7 +576,7 @@
                                                             Gigi Anomali
                                                         </td>
                                                         <td style="vertical-align: top;"> : </td>
-                                                        <td>
+                                                        <td style="vertical-align: top;">
                                                             <span id="rmd_gigi_anomali"></span>
                                                         </td>
                                                     </tr>
@@ -579,7 +585,7 @@
                                                             Lain Lain
                                                         </td>
                                                         <td style="vertical-align: top;"> : </td>
-                                                        <td>
+                                                        <td style="vertical-align: top;">
                                                             <span id="rmd_lain_lain"></span>
                                                         </td>
                                                     </tr>
@@ -588,7 +594,7 @@
                                                             D M F
                                                         </td>
                                                         <td style="vertical-align: top;"> : </td>
-                                                        <td>
+                                                        <td style="vertical-align: top;">
                                                             <span id="rmd_dmf"></span>
                                                         </td>
                                                     </tr>
@@ -596,12 +602,23 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            <br>
+                                            <b>Tindakan</b><br>
+                                            <div id="rmd_tindakan"></div>
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
-                            <div class="col-md-12 mt-4">
-                                <button class="btn btn-success btn-lg float-right" id="btn_cetak_resume"
-                                    style="display: none;" onclick="cetak_resume_medis()" type="button">Cetak</button>
-                            </div>
+
+                            @if ($data)
+                                <div class="col-md-12 mt-4">
+                                    <a href="{{ url('/kunjungan/print-resume-medis/' . $data->no_registrasikunjungan . '/' . $data->no_rm) }}"
+                                        target="blank()" class="btn btn-success btn-lg float-right" id="btn_cetak_resume"
+                                        style="display: none;">Cetak</a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

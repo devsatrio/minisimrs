@@ -31,5 +31,6 @@ Route::get('/kunjungan/get-odontogram/{no_kunjungan}/{no_rm}',[kunjunganControll
 Route::get('/kunjungan/get-diagnosa/{no_kunjungan}/{no_rm}',[kunjunganController::class,'getDiagnosa']);
 Route::get('/kunjungan/get-resume-medis/{no_kunjungan}/{no_rm}',[kunjunganController::class,'getResumeMedis']);
 Route::get('/kunjungan/get-pemeriksaan-fisik/{no_kunjungan}/{no_rm}',[kunjunganController::class,'getPemeriksaanFisik']);
+Route::get('/kunjungan/print-resume-medis/{no_kunjungan}/{no_rm}',[kunjunganController::class,'printResumeMedis']);
 Route::resource('/kunjungan',kunjunganController::class);
 Route::resource('/billing',billingController::class);

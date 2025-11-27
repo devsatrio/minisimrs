@@ -28,7 +28,7 @@ class billingController extends Controller
         }
 
         $data=$data->orderby('id','desc')
-        ->paginate(2);
+        ->paginate(20);
 
         return view('billing.index',compact('data'));
     }

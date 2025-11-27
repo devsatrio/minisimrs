@@ -129,6 +129,11 @@ class kunjunganController extends Controller
     }
 
     //================================================================================================
+    public function printResumeMedis($kunjungan,$norm) {
+        return view('kunjungan.print_resume_medis',compact('kunjungan','norm'));
+    }
+
+    //================================================================================================
     public function getResumeMedis($kunjungan,$norm) {
 
         $data_kunjungan = DB::table('kunjungan')
@@ -153,12 +158,19 @@ class kunjunganController extends Controller
         ->where('no_registrasikunjungan',$kunjungan)
         ->where('no_rm',$norm)
         ->get();
+        
+        $tindakan = DB::table('detail_transaksi')
+        ->select(DB::raw('detail_transaksi.*,transaksi.no_registrasikunjungan'))
+        ->leftjoin('transaksi','transaksi.no_transaksi','=','detail_transaksi.no_transaksi')
+        ->where('transaksi.no_registrasikunjungan',$kunjungan)
+        ->get();
 
         $print=[
             'kunjungan'=>$data_kunjungan,
             'diagnosa'=>$diagnosa,
             'pemeriksaan_fisik'=>$pemeriksaan_fisik,
             'odontogram'=>$odontogram,
+            'tindakan'=>$tindakan
         ];
         
         return response()->json($print);

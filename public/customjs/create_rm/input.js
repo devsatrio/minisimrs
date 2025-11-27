@@ -181,7 +181,7 @@ function init_table() {
                         `</td><td class="text-center" style="width:8%"><button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['rightChild'] + `')"> [` + teethTable[index]['rightChild'] + `]</button><button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['rightAdult'] + `')">` + teethTable[index]['rightAdult'] + '</button></td>';
                 } else {
                     td_table = td_table + '<td class="p-1">' +
-                        '<span class="viewketgigi" id="viewketgigi' + teethTable[index]['leftAdult'] + '"></span>' +
+                        '<span class="viewketgigi" id="viewketgigi' + teethTable[index]['rightAdult'] + '"></span>' +
                         '</td>' +
                         `</td><td class="text-center" style="width:8%"><button class="btn btn-sm m-1 btn-success" type="button" onclick="directEdit('` + teethTable[index]['rightAdult'] + `')">` + teethTable[index]['rightAdult'] + '</button></td>';
                 }
@@ -284,7 +284,7 @@ function init_table_resume() {
                         `</td><td class="text-center" style="width:8%">[` + teethTable[index]['rightChild'] + `]` + teethTable[index]['rightAdult'] + '</td>';
                 } else {
                     td_table = td_table + '<td class="p-1">' +
-                        '<span class="rmd_viewketgigi" id="rmd_viewketgigi' + teethTable[index]['leftAdult'] + '"></span>' +
+                        '<span class="rmd_viewketgigi" id="rmd_viewketgigi' + teethTable[index]['rightAdult'] + '"></span>' +
                         '</td>' +
                         `</td><td class="text-center" style="width:8%">` + teethTable[index]['rightAdult'] + '</td>';
                 }
@@ -356,7 +356,11 @@ function init_value_odontogram_resume(data_odontogram_resume) {
     console.log(data_odontogram_resume);
     $('.rmd_viewketgigi').html('');
     for (let index = 0; index < data_odontogram_resume.length; index++) {
-        $('#rmd_viewketgigi' + data_odontogram_resume[index]['nomor_gigi']).html(data_odontogram_resume[index]['keterangan']);
+        if (data_odontogram_resume[index]['keterangan'] == null || data_odontogram_resume[index]['keterangan'] == '') {
+            $('#rmd_viewketgigi' + data_odontogram_resume[index]['nomor_gigi']).html('sou');
+        } else {
+            $('#rmd_viewketgigi' + data_odontogram_resume[index]['nomor_gigi']).html(data_odontogram_resume[index]['keterangan']);
+        }
     }
 }
 
@@ -469,12 +473,16 @@ function get_resume_medis() {
                     $('#rmd_pernafasan').html(val_pf.pernafasaan);
                     $('#rmd_spo').html(val_pf.spo);
                 });
+
+                var list_tindakan ='';
+                $.each(data.tindakan, function (key_t, val_t) {
+                    list_tindakan=list_tindakan+'<li>'+val_t.nama_tindakan+' x '+val_t.qty+'</li>';
+                });
                 $('#pills-resume-medis-tab').show();
                 $('#btn_cetak_resume').show();
 
                 var value_odontogram;
                 var keterangan_odontogram;
-                var tr_keterangan_odontogram='';
                 $.each(data.odontogram, function (key_od, val_od) {
                     value_odontogram = JSON.parse(val_od.gambar_odontogram);
                     keterangan_odontogram = JSON.parse(val_od.keterangan_odontogram);
@@ -483,33 +491,26 @@ function get_resume_medis() {
                     $('#rmd_torus_madibularis').html(val_od.torus_madibularis);
                     $('#rmd_palatum').html(val_od.palatum);
                     var diastema;
-                    if(val_od.ket_diastema!=''){
-                        diastema=val_od.diastema+', '+val_od.ket_diastema;
-                    }else{
-                        diastema=val_od.diastema;
+                    if (val_od.ket_diastema != '') {
+                        diastema = val_od.diastema + ', ' + val_od.ket_diastema;
+                    } else {
+                        diastema = val_od.diastema;
                     }
 
                     var val_gigi_anomali;
-                    if(val_od.ket_gigi_anomali!=''){
-                        val_gigi_anomali=val_od.gigi_anomali+', '+val_od.ket_gigi_anomali;
-                    }else{
-                        val_gigi_anomali=val_od.gigi_anomali;
+                    if (val_od.ket_gigi_anomali != '') {
+                        val_gigi_anomali = val_od.gigi_anomali + ', ' + val_od.ket_gigi_anomali;
+                    } else {
+                        val_gigi_anomali = val_od.gigi_anomali;
                     }
                     $('#rmd_diastema').html(diastema);
                     $('#rmd_gigi_anomali').html(val_gigi_anomali);
                     $('#rmd_lain_lain').html(val_od.lain_lain);
-                    $('#rmd_dmf').html(val_od.input_d+' '+val_od.input_m+' '+val_od.input_f);
+                    $('#rmd_dmf').html(val_od.input_d + ' ' + val_od.input_m + ' ' + val_od.input_f);
                 });
 
+                $('#rmd_tindakan').html('<ul>'+list_tindakan+'</ul>');
                 init_value_odontogram_resume(keterangan_odontogram);
-                // for (let i = 0; i < keterangan_odontogram.length; i++) {
-                //     if (keterangan_odontogram[i].keterangan && keterangan_odontogram[i].keterangan !== "") {
-                //         tr_keterangan_odontogram=tr_keterangan_odontogram+'<tr>'+
-                //         '<td width="11%">&nbsp;Gigi Nomor '+keterangan_odontogram[i].nomor_gigi+'</td>'+
-                //         '<td>&nbsp;'+keterangan_odontogram[i].keterangan+'</td></tr>';
-                //     }
-                // }
-                // $('#table_ket_odontogram').html(tr_keterangan_odontogram);
                 init_odontogram_resume(value_odontogram);
             }
         }, complete: function () {
@@ -730,6 +731,7 @@ function simpan_asessmen() {
                             $("#pills-pemeriksaan-odontogram-tab").addClass("btn-success");
                             Swal.fire("Saved!", "", "success");
                         }, complete: function () {
+                            get_resume_medis();
                         }, error: function () {
                         }
                     });
@@ -769,6 +771,7 @@ function simpan_diagnosa() {
                         $("#pills-diagnosa-tab").addClass("btn-success");
                         Swal.fire("Saved!", "", "success");
                     }, complete: function () {
+                        get_resume_medis();
                     }, error: function () {
                     }
                 });
@@ -813,6 +816,7 @@ function simpan_pemeriksaan_fisik() {
                         $("#pills-pemeriksaan-fisik-tab").addClass("btn-success");
                         Swal.fire("Saved!", "", "success");
                     }, complete: function () {
+                        get_resume_medis();
                     }, error: function () {
                     }
                 });
