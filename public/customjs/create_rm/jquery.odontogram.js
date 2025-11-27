@@ -2058,6 +2058,11 @@ var ODONTOGRAM_MODE_ARROW_BOTTOM_TURN_RIGHT = 26; // BOTTOM-TURN-RIGHT ARROW
                 break;
         }
 
+        // Salin properti tambahan seperti `pos` jika ada
+        if (newGeom && geometry.pos !== undefined) {
+            newGeom.pos = geometry.pos;
+        }
+
         return newGeom;
     }
 

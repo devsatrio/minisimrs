@@ -66,6 +66,7 @@ var data_odontogram = [
     { nomor_gigi: 75, keterangan: null },
 ];
 
+
 var odontogram_keterangan = [
     { nomor_aksi: 100, ket_aksi: null },//aksi hapus
     { nomor_aksi: 1, ket_aksi: 'amf' },
@@ -94,7 +95,14 @@ var odontogram_keterangan = [
     { nomor_aksi: 24, ket_aksi: null },
     { nomor_aksi: 25, ket_aksi: null },
     { nomor_aksi: 26, ket_aksi: null },
-]
+];
+
+var groupedDMF = {
+    D: ["cof", "fis", "car", "cfr", "poc", "rrx", "mis", "ipx"],
+    M: ["non", "une", "uno", "prd / fld"],
+    F: ["amf", "rct", "nvt", "fmc", "pre"]
+};
+
 
 const teethTable = [
     { leftAdult: "11", leftChild: "51", rightChild: "61", rightAdult: "21", hasDoubleInput: true, is_table: 'tabel_satu' },
@@ -115,11 +123,20 @@ const teethTable = [
     { leftAdult: "41", leftChild: "81", rightChild: "71", rightAdult: "31", hasDoubleInput: true, is_table: 'tabel_dua' }
 ];
 
+var odontogram_arr = [];
+var odontogram_bridge_arr = [];
+var final_odontogram_arr = [];
+
+var savedData;
+
 $(document).ready(function () {
-
-
     init_table();
-    init_value_odontogram();
+    init_table_resume();
+
+    get_data_odontogram();
+    get_data_diagnosa();
+    get_data_pemeriksaan_fisik();
+    get_resume_medis();
 });
 
 function init_table() {
@@ -225,12 +242,281 @@ function init_table() {
     $('#table_dua').html(td_table_dua);
 }
 
+function init_table_resume() {
+    var td_table = '';
+    var td_table_dua = '';
+    for (let index = 0; index < teethTable.length; index++) {
+        if (teethTable[index]['is_table'] == 'tabel_satu') {
+            td_table = td_table + '<tr>';
+            if (teethTable[index]['leftAdult'] != null) {
+                if (teethTable[index]['leftChild'] != null) {
+                    td_table = td_table + `<td class="text-center" style="width:8%">` + teethTable[index]['leftAdult'] + '' +
+                        `[` + teethTable[index]['leftChild'] + ']</td>' +
+                        '<td class="p-1"><div class="row">' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['leftAdult'] + ': </span>' +
+                        '<span class="rmd_viewketgigi" id="rmd_viewketgigi' + teethTable[index]['leftAdult'] + '"></span>' +
+                        '</div>' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['leftChild'] + ': </span>' +
+                        '<span class="rmd_viewketgigi" id="rmd_viewketgigi' + teethTable[index]['leftChild'] + '"></span>' +
+                        '</div></div>' +
+                        '</td>';
+                } else {
+                    td_table = td_table + `<td class="text-center" style="width:8%">` + teethTable[index]['leftAdult'] + '</td>' +
+                        '<td class="p-1">' +
+                        '<span class="rmd_viewketgigi" id="rmd_viewketgigi' + teethTable[index]['leftAdult'] + '"></span>' +
+                        '</td>';
+                }
+            }
+
+            if (teethTable[index]['rightAdult'] != null) {
+                if (teethTable[index]['rightChild'] != null) {
+                    td_table = td_table + '<td class="p-1"><div class="row">' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['rightChild'] + ': </span>' +
+                        '<span class="rmd_viewketgigi" id="rmd_viewketgigi' + teethTable[index]['rightChild'] + '"></span>' +
+                        '</div>' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['rightAdult'] + ': </span>' +
+                        '<span class="rmd_viewketgigi" id="rmd_viewketgigi' + teethTable[index]['rightAdult'] + '"></span>' +
+                        '</div></div>' +
+                        `</td><td class="text-center" style="width:8%">[` + teethTable[index]['rightChild'] + `]` + teethTable[index]['rightAdult'] + '</td>';
+                } else {
+                    td_table = td_table + '<td class="p-1">' +
+                        '<span class="rmd_viewketgigi" id="rmd_viewketgigi' + teethTable[index]['leftAdult'] + '"></span>' +
+                        '</td>' +
+                        `</td><td class="text-center" style="width:8%">` + teethTable[index]['rightAdult'] + '</td>';
+                }
+            }
+            td_table = td_table + '</tr>';
+        }
+    }
+    for (let index = 0; index < teethTable.length; index++) {
+        if (teethTable[index]['is_table'] == 'tabel_dua') {
+            td_table_dua = td_table_dua + '<tr>';
+            if (teethTable[index]['leftAdult'] != null) {
+                if (teethTable[index]['leftChild'] != null) {
+                    td_table_dua = td_table_dua + `<td class="text-center" style="width:8%">` + teethTable[index]['leftAdult'] +
+                        `[` + teethTable[index]['leftChild'] + ']</td>' +
+                        '<td class="p-1"><div class="row">' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['leftAdult'] + ': </span>' +
+                        '<span class="rmd_viewketgigi" id="rmd_viewketgigi' + teethTable[index]['leftAdult'] + '"></span>' +
+                        '</div>' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['leftChild'] + ': </span>' +
+                        '<span class="rmd_viewketgigi" id="rmd_viewketgigi' + teethTable[index]['leftChild'] + '"></span>' +
+                        '</div></div>' +
+                        '</td>';
+                } else {
+                    td_table_dua = td_table_dua + `<td class="text-center" style="width:8%">` + teethTable[index]['leftAdult'] + '</td>' +
+                        '<td class="p-1">' +
+                        '<span class="rmd_viewketgigi" id="rmd_viewketgigi' + teethTable[index]['leftAdult'] + '"></span>' +
+                        '</td>';
+                }
+            }
+
+            if (teethTable[index]['rightAdult'] != null) {
+                if (teethTable[index]['rightChild'] != null) {
+                    td_table_dua = td_table_dua + '<td class="p-1"><div class="row">' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['rightChild'] + ': </span>' +
+                        '<span class="rmd_viewketgigi" id="rmd_viewketgigi' + teethTable[index]['rightChild'] + '"></span>' +
+                        '</div>' +
+                        '<div class="col-md-6">' +
+                        '<span>' + teethTable[index]['rightAdult'] + ': </span>' +
+                        '<span class="rmd_viewketgigi" id="rmd_viewketgigi' + teethTable[index]['rightAdult'] + '"></span>' +
+                        '</div>' +
+                        '</div>' +
+                        `</td><td class="text-center" style="width:8%">[` + teethTable[index]['rightChild'] +
+                        `]` + teethTable[index]['rightAdult'] + '</td>';
+                } else {
+                    td_table_dua = td_table_dua + '<td class="p-1">' +
+                        '<span class="rmd_viewketgigi" id="rmd_viewketgigi' + teethTable[index]['rightAdult'] + '"></span>' +
+                        '</td>' +
+                        `</td><td class="text-center" style="width:8%">` + teethTable[index]['rightAdult'] + '</td>';
+                }
+            }
+            td_table_dua = td_table_dua + '</tr>';
+        }
+    }
+    $('#table_ketodontogram_satu').html(td_table);
+    $('#table_ketodontogram_dua').html(td_table_dua);
+}
+
 function init_value_odontogram() {
     $('.viewketgigi').html('');
     for (let index = 0; index < data_odontogram.length; index++) {
         $('#viewketgigi' + data_odontogram[index]['nomor_gigi']).html(data_odontogram[index]['keterangan']);
     }
 }
+
+function init_value_odontogram_resume(data_odontogram_resume) {
+    console.log(data_odontogram_resume);
+    $('.rmd_viewketgigi').html('');
+    for (let index = 0; index < data_odontogram_resume.length; index++) {
+        $('#rmd_viewketgigi' + data_odontogram_resume[index]['nomor_gigi']).html(data_odontogram_resume[index]['keterangan']);
+    }
+}
+
+function get_data_odontogram() {
+    var norm = $('#no_rm').val();
+    var noreg = $('#no_registrasikunjungan').val();
+    $.ajax({
+        type: 'GET',
+        url: '/kunjungan/get-odontogram/' + noreg + '/' + norm,
+        success: function (data) {
+            if (data.length > 0) {
+                $.each(data, function (key, value) {
+                    savedData = JSON.parse(value.gambar_odontogram);
+                    data_odontogram = JSON.parse(value.keterangan_odontogram);
+                    final_odontogram_arr = JSON.parse(value.gambar_odontogram);
+                    $('#tgl_pemeriksaan').val(value.tgl_pemeriksaan);
+                    $('#occulusi').val(value.occulusi);
+                    $('#torus_palatinus').val(value.torus_palatinus);
+                    $('#torus_madibularis').val(value.torus_madibularis);
+                    $('#palatum').val(value.palatum);
+                    $('#diastema').val(value.diastema);
+                    $('#ket_diastema').val(value.ket_diastema);
+                    $('#gigi_anomali').val(value.gigi_anomali);
+                    $('#ket_gigi_anomali').val(value.ket_gigi_anomali);
+                    $('#lain_lain').val(value.lain_lain);
+                    $('#input_d').val(value.input_d);
+                    $('#input_f').val(value.input_f);
+                    $('#input_m').val(value.input_m);
+                    $("#pills-pemeriksaan-odontogram-tab").removeClass("btn-secondary");
+                    $("#pills-pemeriksaan-odontogram-tab").addClass("btn-success");
+                });
+                odontogram_init_all_function();
+            } else {
+                odontogram_init_all_function();
+            }
+        }, complete: function () {
+            init_value_odontogram();
+        }
+    });
+}
+
+function get_data_diagnosa() {
+    var norm = $('#no_rm').val();
+    var noreg = $('#no_registrasikunjungan').val();
+    $.ajax({
+        type: 'GET',
+        url: '/kunjungan/get-diagnosa/' + noreg + '/' + norm,
+        success: function (data) {
+            if (data.length > 0) {
+                $.each(data, function (key, value) {
+                    $('#diagnosa').val(value.diagnosa);
+                    $("#pills-diagnosa-tab").removeClass("btn-secondary");
+                    $("#pills-diagnosa-tab").addClass("btn-success");
+                });
+            }
+        }, complete: function () {
+        }
+    });
+}
+
+function get_data_pemeriksaan_fisik() {
+    var norm = $('#no_rm').val();
+    var noreg = $('#no_registrasikunjungan').val();
+    $.ajax({
+        type: 'GET',
+        url: '/kunjungan/get-pemeriksaan-fisik/' + noreg + '/' + norm,
+        success: function (data) {
+            if (data.length > 0) {
+                $.each(data, function (key, value) {
+                    $('#keluhan_utama').val(value.keluhan_utama);
+                    $('#spo2').val(value.spo);
+                    $('#suhu').val(value.suhu);
+                    $('#nadi').val(value.nadi);
+                    $('#pernafasaan').val(value.pernafasaan);
+                    $('#sistolik').val(value.sistolik);
+                    $('#diastolik').val(value.diastolik);
+                    $("#pills-pemeriksaan-fisik-tab").removeClass("btn-secondary");
+                    $("#pills-pemeriksaan-fisik-tab").addClass("btn-success");
+                });
+            }
+        }, complete: function () {
+        }
+    });
+}
+
+function get_resume_medis() {
+    var norm = $('#no_rm').val();
+    var noreg = $('#no_registrasikunjungan').val();
+    $.ajax({
+        type: 'GET',
+        url: '/kunjungan/get-resume-medis/' + noreg + '/' + norm,
+        success: function (data) {
+            if (data.diagnosa.length > 0 && data.pemeriksaan_fisik.length > 0 && data.odontogram.length > 0) {
+                $.each(data.kunjungan, function (key_k, val_k) {
+                    $('#rmd_no_kunjungan').html(val_k.no_registrasikunjungan);
+                    $('#rmd_tgl_kunjungan').html(val_k.tanggal_kunjungan);
+                    $('#rmd_pasien').html(val_k.no_rm + ' - ' + val_k.nama_pasien);
+                    $('#rmd_poli').html(val_k.nama_poli);
+                    $('#rmd_dokter').html(val_k.nama_dokter);
+                });
+                $.each(data.diagnosa, function (key, value) {
+                    $('#rmd_diagnosa').html(value.diagnosa);
+                });
+                $.each(data.pemeriksaan_fisik, function (key_pf, val_pf) {
+                    $('#rmd_keluhan_utama').html(val_pf.keluhan_utama);
+                    $('#rmd_sistolik').html(val_pf.sistolik);
+                    $('#rmd_diastolik').html(val_pf.diastolik);
+                    $('#rmd_suhu').html(val_pf.suhu);
+                    $('#rmd_nadi').html(val_pf.nadi);
+                    $('#rmd_pernafasan').html(val_pf.pernafasaan);
+                    $('#rmd_spo').html(val_pf.spo);
+                });
+                $('#pills-resume-medis-tab').show();
+                $('#btn_cetak_resume').show();
+
+                var value_odontogram;
+                var keterangan_odontogram;
+                var tr_keterangan_odontogram='';
+                $.each(data.odontogram, function (key_od, val_od) {
+                    value_odontogram = JSON.parse(val_od.gambar_odontogram);
+                    keterangan_odontogram = JSON.parse(val_od.keterangan_odontogram);
+                    $('#rmd_occulusi').html(val_od.occulusi);
+                    $('#rmd_torus_palatinus').html(val_od.torus_palatinus);
+                    $('#rmd_torus_madibularis').html(val_od.torus_madibularis);
+                    $('#rmd_palatum').html(val_od.palatum);
+                    var diastema;
+                    if(val_od.ket_diastema!=''){
+                        diastema=val_od.diastema+', '+val_od.ket_diastema;
+                    }else{
+                        diastema=val_od.diastema;
+                    }
+
+                    var val_gigi_anomali;
+                    if(val_od.ket_gigi_anomali!=''){
+                        val_gigi_anomali=val_od.gigi_anomali+', '+val_od.ket_gigi_anomali;
+                    }else{
+                        val_gigi_anomali=val_od.gigi_anomali;
+                    }
+                    $('#rmd_diastema').html(diastema);
+                    $('#rmd_gigi_anomali').html(val_gigi_anomali);
+                    $('#rmd_lain_lain').html(val_od.lain_lain);
+                    $('#rmd_dmf').html(val_od.input_d+' '+val_od.input_m+' '+val_od.input_f);
+                });
+
+                init_value_odontogram_resume(keterangan_odontogram);
+                // for (let i = 0; i < keterangan_odontogram.length; i++) {
+                //     if (keterangan_odontogram[i].keterangan && keterangan_odontogram[i].keterangan !== "") {
+                //         tr_keterangan_odontogram=tr_keterangan_odontogram+'<tr>'+
+                //         '<td width="11%">&nbsp;Gigi Nomor '+keterangan_odontogram[i].nomor_gigi+'</td>'+
+                //         '<td>&nbsp;'+keterangan_odontogram[i].keterangan+'</td></tr>';
+                //     }
+                // }
+                // $('#table_ket_odontogram').html(tr_keterangan_odontogram);
+                init_odontogram_resume(value_odontogram);
+            }
+        }, complete: function () {
+        }
+    });
+}
+
 
 function get_click_action(nomor_gigi, mode) {
     $('#label_gigi').html(nomor_gigi);
@@ -298,12 +584,10 @@ function updateKeteranganGigi(nomor, kataBaru) {
     for (let i = 0; i < data_odontogram.length; i++) {
         if (data_odontogram[i].nomor_gigi == nomor) {
             data_odontogram[i].keterangan = kataBaru;
-            console.log(data_odontogram[i]);
             break;
         }
     }
 }
-
 
 function tambahKata(kalimat, kata) {
     const arr = kalimat.trim().split(/\s+/);
@@ -320,7 +604,7 @@ function cariGigi(nomor) {
             return data_odontogram[i];
         }
     }
-    return null; // jika tidak ditemukan
+    return null;
 }
 
 function closeFormOdontogram() {
@@ -336,176 +620,362 @@ function cariKetOdontogram(nomor) {
     }
     return null;
 }
-$("#odontogram").odontogram('init', {
-    width: "900px",
-    height: "330px"
-});
 
-const savedData = {
-    teeth: [{
-        code: 'AMF',
-        pos: '18-R'
-    },
-    {
-        code: 'CARIES',
-        pos: '84-M'
+function hitungDMF() {
+    const count = { D: 0, M: 0, F: 0 };
+    const details = [];
+
+    data_odontogram.forEach(g => {
+        const raw = (g.keterangan || "").toLowerCase().trim();
+        if (!raw) return;
+
+        // Normalisasi keterangan
+        const norm = raw.replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim();
+
+        // cek per kategori
+        const hasD = groupedDMF.D.some(code => norm.includes(code));
+        const hasM = groupedDMF.M.some(code => norm.includes(code));
+        const hasF = groupedDMF.F.some(code => norm.includes(code));
+
+        let kategori = null;
+
+        // PRIORITAS WHO
+        if (hasD) {
+            kategori = "D";
+        } else if (hasM) {
+            kategori = "M";
+        } else if (hasF) {
+            kategori = "F";
+        }
+
+        if (kategori) {
+            count[kategori]++;
+            details.push({
+                nomor_gigi: g.nomor_gigi,
+                keterangan: g.keterangan,
+                kategori
+            });
+        }
+    });
+
+    var label_detail = '';
+    for (let idetail = 0; idetail < details.length; idetail++) {
+        label_detail = label_detail + '<li> Gigi Nomor ' + details[idetail].nomor_gigi + ' - ' + details[idetail].keterangan + ' - ' + details[idetail].kategori + '</li>';
+
     }
-    ],
-    bridges: [{
-        "name": "BRIDGE",
-        "startVert": [{
-            "x": "373.125",
-            "y": "245.625"
-        },
-        {
-            "x": "415",
-            "y": "287.5"
-        }
-        ],
-        "endVert": [{
-            "x": "455",
-            "y": "245.625"
-        },
-        {
-            "x": "496.875",
-            "y": "287.5"
-        }
-        ],
-        "options": {
-            "strokeStyle": "#555"
-        }
-    },
-    {
-        "name": "BRIDGE",
-        "startVert": [
-            {
-                "x": "113.75",
-                "y": "245.625"
-            },
-            {
-                "x": "155.625",
-                "y": "287.5"
-            }
-        ],
-        "endVert": [
-            {
-                "x": "269.375",
-                "y": "245.625"
-            },
-            {
-                "x": "311.25",
-                "y": "287.5"
-            }
-        ],
-        "options": {
-            "strokeStyle": "#555"
-        }
-    }
-    ]
-};
-
-// 1. Ambil instance odontogram
-const odonto = $("#odontogram").data('odontogram');
-
-// 2. Konversi data gigi biasa ke format geometry
-const teethGeometry = odonto.setGeometryByPos(savedData.teeth); // Ini return objek geometry
-
-// 3. Tambahkan bridge sebagai objek literal (bukan instance!)
-// Gunakan key khusus agar tidak bentrok
-if (!teethGeometry["BRIDGES"]) teethGeometry["BRIDGES"] = [];
-for (const bridge of savedData.bridges) {
-    // Pastikan x/y tetap string atau number — tidak masalah karena convertGeomFromObject parse otomatis
-    teethGeometry["BRIDGES"].push(bridge);
+    //   console.log(count);
+    //   console.log(details);
+    $('#input_d').val(count.D);
+    $('#input_m').val(count.M);
+    $('#input_f').val(count.F);
+    Swal.fire({
+        title: "<strong>Rincian Perhitungan <u>DMF</u></strong>",
+        icon: "info",
+        html: `
+    Detail Perhitungan : <ul>`+ label_detail + `</ul>`,
+        showCloseButton: true,
+        showCancelButton: false,
+        focusConfirm: false,
+        showConfirmButton: false,
+    });
 }
 
-// 4. Set SEMUA geometri sekaligus
-$("#odontogram").odontogram('setGeometry', teethGeometry);
+function simpan_asessmen() {
+    Swal.fire({
+        title: "Simpan Pemeriksaan?",
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`
+    }).then((result) => {
+        if (result.value) {
+            if ($('#tgl_pemeriksaan').val() == '' ||
+                $('#input_d').val() == '' ||
+                $('#input_m').val() == '' ||
+                $('#input_f').val() == '') {
+                Swal.fire("Semua data harus diisi", "", "info");
+            } else {
+                if (final_odontogram_arr.length <= 0) {
+                    Swal.fire("Odontogram harus diisi", "", "info");
+                } else {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        type: 'POST',
+                        url: '/kunjungan/simpan-odontogram',
+                        data: {
+                            '_token': $('input[name=_token]').val(),
+                            'no_rm': $('#no_rm').val(),
+                            'no_registrasikunjungan': $('#no_registrasikunjungan').val(),
+                            'tgl_pemeriksaan': $('#tgl_pemeriksaan').val(),
+                            'occulusi': $('#occulusi').val(),
+                            'torus_palatinus': $('#torus_palatinus').val(),
+                            'torus_madibularis': $('#torus_madibularis').val(),
+                            'palatum': $('#palatum').val(),
+                            'diastema': $('#diastema').val(),
+                            'ket_diastema': $('#ket_diastema').val(),
+                            'gigi_anomali': $('#gigi_anomali').val(),
+                            'ket_gigi_anomali': $('#ket_gigi_anomali').val(),
+                            'lain_lain': $('#lain_lain').val(),
+                            'input_d': $('#input_d').val(),
+                            'input_m': $('#input_m').val(),
+                            'input_f': $('#input_f').val(),
+                            'final_odontogram_arr': JSON.stringify(final_odontogram_arr),
+                            'data_odontogram': JSON.stringify(data_odontogram)
+                        },
+                        success: function () {
+                            $("#pills-pemeriksaan-odontogram-tab").removeClass("btn-secondary");
+                            $("#pills-pemeriksaan-odontogram-tab").addClass("btn-success");
+                            Swal.fire("Saved!", "", "success");
+                        }, complete: function () {
+                        }, error: function () {
+                        }
+                    });
+                }
+            }
+        }
+    });
+}
 
-$('#odontogram').on('change', function (_, geometry) {
-    console.log(geometry);
-})
+function simpan_diagnosa() {
+    Swal.fire({
+        title: "Simpan Diagnosa?",
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`
+    }).then((result) => {
+        if (result.value) {
+            if ($('#diagnosa').val() == '') {
+                Swal.fire("Semua data harus diisi", "", "info");
+            } else {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: '/kunjungan/simpan-diagnosa',
+                    data: {
+                        '_token': $('input[name=_token]').val(),
+                        'no_rm': $('#no_rm').val(),
+                        'no_registrasikunjungan': $('#no_registrasikunjungan').val(),
+                        'diagnosa': $('#diagnosa').val()
+                    },
+                    success: function () {
+                        $("#pills-diagnosa-tab").removeClass("btn-secondary");
+                        $("#pills-diagnosa-tab").addClass("btn-success");
+                        Swal.fire("Saved!", "", "success");
+                    }, complete: function () {
+                    }, error: function () {
+                    }
+                });
+            }
+        }
+    });
+}
 
-$("#ODONTOGRAM_MODE_HAPUS").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_HAPUS);
+function simpan_pemeriksaan_fisik() {
+    Swal.fire({
+        title: "Simpan Pemeriksaan Fisik?",
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`
+    }).then((result) => {
+        if (result.value) {
+            if ($('#diagnosa').val() == '') {
+                Swal.fire("Semua data harus diisi", "", "info");
+            } else {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: '/kunjungan/simpan-pemeriksaan-fisik',
+                    data: {
+                        '_token': $('input[name=_token]').val(),
+                        'no_rm': $('#no_rm').val(),
+                        'no_registrasikunjungan': $('#no_registrasikunjungan').val(),
+                        'keluhan_utama': $('#keluhan_utama').val(),
+                        'spo2': $('#spo2').val(),
+                        'suhu': $('#suhu').val(),
+                        'nadi': $('#nadi').val(),
+                        'pernafasaan': $('#pernafasaan').val(),
+                        'sistolik': $('#sistolik').val(),
+                        'diastolik': $('#diastolik').val()
+                    },
+                    success: function () {
+                        $("#pills-pemeriksaan-fisik-tab").removeClass("btn-secondary");
+                        $("#pills-pemeriksaan-fisik-tab").addClass("btn-success");
+                        Swal.fire("Saved!", "", "success");
+                    }, complete: function () {
+                    }, error: function () {
+                    }
+                });
+            }
+        }
+    });
+}
+
+$("#odontogram").odontogram('init', {
+    width: "1200px",
+    height: "430px"
 });
-$("#ODONTOGRAM_MODE_DEFAULT").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_DEFAULT);
-});
-$("#ODONTOGRAM_MODE_AMF").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_AMF);
-});
-$("#ODONTOGRAM_MODE_COF").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_COF);
-});
-$("#ODONTOGRAM_MODE_FIS").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_FIS);
-});
-$("#ODONTOGRAM_MODE_NVT").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_NVT);
-});
-$("#ODONTOGRAM_MODE_RCT").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_RCT);
-});
-$("#ODONTOGRAM_MODE_NON").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_NON);
-});
-$("#ODONTOGRAM_MODE_UNE").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_UNE);
-});
-$("#ODONTOGRAM_MODE_PRE").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_PRE);
-});
-$("#ODONTOGRAM_MODE_ANO").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ANO);
-});
-$("#ODONTOGRAM_MODE_CARIES").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_CARIES);
-});
-$("#ODONTOGRAM_MODE_CFR").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_CFR);
-});
-$("#ODONTOGRAM_MODE_FMC").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_FMC);
-});
-$("#ODONTOGRAM_MODE_POC").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_POC);
-});
-$("#ODONTOGRAM_MODE_RRX").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_RRX);
-});
-$("#ODONTOGRAM_MODE_MIS").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_MIS);
-});
-$("#ODONTOGRAM_MODE_IPX").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_IPX);
-});
-$("#ODONTOGRAM_MODE_FRM_ACR").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_FRM_ACR);
-});
-$("#ODONTOGRAM_MODE_BRIDGE").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_BRIDGE);
-});
-$("#ODONTOGRAM_MODE_ARROW_TOP_LEFT").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_TOP_LEFT);
-})
-$("#ODONTOGRAM_MODE_ARROW_TOP_RIGHT").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_TOP_RIGHT);
-})
-$("#ODONTOGRAM_MODE_ARROW_TOP_TURN_LEFT").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_TOP_TURN_LEFT);
-})
-$("#ODONTOGRAM_MODE_ARROW_TOP_TURN_RIGHT").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_TOP_TURN_RIGHT);
-})
-$("#ODONTOGRAM_MODE_ARROW_BOTTOM_LEFT").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_BOTTOM_LEFT);
-})
-$("#ODONTOGRAM_MODE_ARROW_BOTTOM_RIGHT").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_BOTTOM_RIGHT);
-})
-$("#ODONTOGRAM_MODE_ARROW_BOTTOM_TURN_LEFT").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_BOTTOM_TURN_LEFT);
-})
-$("#ODONTOGRAM_MODE_ARROW_BOTTOM_TURN_RIGHT").click(function () {
-    $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_BOTTOM_TURN_RIGHT);
-})
+
+function init_odontogram_resume(value_odontogram) {
+    $("#rmd_odontogram").odontogram('init', {
+        width: "1200px",
+        height: "430px"
+    });
+    const rmd_odonto = $("#rmd_odontogram").data('odontogram');
+    if (value_odontogram !== undefined) {
+        // 2. Konversi data gigi biasa ke format geometry
+        const teethGeometry = rmd_odonto.setGeometryByPos(value_odontogram.teeth); // Ini return objek geometry
+
+        // 3. Tambahkan bridge sebagai objek literal (bukan instance!)
+        // Gunakan key khusus agar tidak bentrok
+        if (!teethGeometry["BRIDGES"]) teethGeometry["BRIDGES"] = [];
+        for (const bridge of value_odontogram.bridges) {
+            // Pastikan x/y tetap string atau number — tidak masalah karena convertGeomFromObject parse otomatis
+            teethGeometry["BRIDGES"].push(bridge);
+        }
+
+        // 4. Set SEMUA geometri sekaligus
+        $("#rmd_odontogram").odontogram('setGeometry', teethGeometry);
+    }
+}
+
+function odontogram_init_all_function() {
+    // 1. Ambil instance odontogram
+    const odonto = $("#odontogram").data('odontogram');
+
+    if (savedData !== undefined) {
+        // 2. Konversi data gigi biasa ke format geometry
+        const teethGeometry = odonto.setGeometryByPos(savedData.teeth); // Ini return objek geometry
+
+        // 3. Tambahkan bridge sebagai objek literal (bukan instance!)
+        // Gunakan key khusus agar tidak bentrok
+        if (!teethGeometry["BRIDGES"]) teethGeometry["BRIDGES"] = [];
+        for (const bridge of savedData.bridges) {
+            // Pastikan x/y tetap string atau number — tidak masalah karena convertGeomFromObject parse otomatis
+            teethGeometry["BRIDGES"].push(bridge);
+        }
+
+        // 4. Set SEMUA geometri sekaligus
+        $("#odontogram").odontogram('setGeometry', teethGeometry);
+    }
+
+    $('#odontogram').on('change', function (_, geometry) {
+        odontogram_arr = [];
+        odontogram_bridge_arr = [];
+        final_odontogram_arr = [];
+        Object.keys(geometry).forEach(key => {
+            const items = geometry[key];
+            items.forEach(item => {
+                if (item.name == 'BRIDGE') {
+                    odontogram_bridge_arr.push(item);
+                } else {
+                    odontogram_arr.push({
+                        code: item.name,
+                        pos: item.pos ?? "" // kalau tidak ada pos, kosong
+                    });
+                }
+            });
+        });
+        final_odontogram_arr = {
+            teeth: odontogram_arr,
+            bridges: odontogram_bridge_arr,
+        };
+        // console.log(geometry);
+        // console.log(final_odontogram_arr);
+    })
+
+    $("#ODONTOGRAM_MODE_HAPUS").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_HAPUS);
+    });
+    $("#ODONTOGRAM_MODE_DEFAULT").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_DEFAULT);
+    });
+    $("#ODONTOGRAM_MODE_AMF").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_AMF);
+    });
+    $("#ODONTOGRAM_MODE_COF").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_COF);
+    });
+    $("#ODONTOGRAM_MODE_FIS").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_FIS);
+    });
+    $("#ODONTOGRAM_MODE_NVT").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_NVT);
+    });
+    $("#ODONTOGRAM_MODE_RCT").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_RCT);
+    });
+    $("#ODONTOGRAM_MODE_NON").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_NON);
+    });
+    $("#ODONTOGRAM_MODE_UNE").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_UNE);
+    });
+    $("#ODONTOGRAM_MODE_PRE").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_PRE);
+    });
+    $("#ODONTOGRAM_MODE_ANO").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ANO);
+    });
+    $("#ODONTOGRAM_MODE_CARIES").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_CARIES);
+    });
+    $("#ODONTOGRAM_MODE_CFR").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_CFR);
+    });
+    $("#ODONTOGRAM_MODE_FMC").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_FMC);
+    });
+    $("#ODONTOGRAM_MODE_POC").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_POC);
+    });
+    $("#ODONTOGRAM_MODE_RRX").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_RRX);
+    });
+    $("#ODONTOGRAM_MODE_MIS").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_MIS);
+    });
+    $("#ODONTOGRAM_MODE_IPX").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_IPX);
+    });
+    $("#ODONTOGRAM_MODE_FRM_ACR").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_FRM_ACR);
+    });
+    $("#ODONTOGRAM_MODE_BRIDGE").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_BRIDGE);
+    });
+    $("#ODONTOGRAM_MODE_ARROW_TOP_LEFT").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_TOP_LEFT);
+    })
+    $("#ODONTOGRAM_MODE_ARROW_TOP_RIGHT").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_TOP_RIGHT);
+    })
+    $("#ODONTOGRAM_MODE_ARROW_TOP_TURN_LEFT").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_TOP_TURN_LEFT);
+    })
+    $("#ODONTOGRAM_MODE_ARROW_TOP_TURN_RIGHT").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_TOP_TURN_RIGHT);
+    })
+    $("#ODONTOGRAM_MODE_ARROW_BOTTOM_LEFT").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_BOTTOM_LEFT);
+    })
+    $("#ODONTOGRAM_MODE_ARROW_BOTTOM_RIGHT").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_BOTTOM_RIGHT);
+    })
+    $("#ODONTOGRAM_MODE_ARROW_BOTTOM_TURN_LEFT").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_BOTTOM_TURN_LEFT);
+    })
+    $("#ODONTOGRAM_MODE_ARROW_BOTTOM_TURN_RIGHT").click(function () {
+        $("#odontogram").odontogram('setMode', ODONTOGRAM_MODE_ARROW_BOTTOM_TURN_RIGHT);
+    })
+}
