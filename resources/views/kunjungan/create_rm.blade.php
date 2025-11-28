@@ -40,8 +40,7 @@
                         </div>
                         <div class="col-md-2">
                             <b>Tanggal Kunjungan</b><br>
-                            {{ $data->tanggal_kunjungan }} -
-                            {{ $data->jam_kunjungan }}
+                            {{ $data->tanggal_kunjungan }}
                             @php
                                 $date_kunjungan = $data->tanggal_kunjungan;
                             @endphp
