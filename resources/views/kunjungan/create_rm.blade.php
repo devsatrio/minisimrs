@@ -396,6 +396,46 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <hr>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Jumlah Photo Yang Diambil</label>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="jum_photo">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <select id="ket_jum_photo" class="form-control">
+                                                <option>-</option>
+                                                <option>Digital</option>
+                                                <option>Intraoral</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Jumlah Rontgen Photo Yang Diambil</label>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="jum_rontgen_photo">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <select id="ket_jum_rontgen_photo" class="form-control">
+                                                <option>-</option>
+                                                <option>Dental</option>
+                                                <option>PA</option>
+                                                <option>OPG</option>
+                                                <option>Ceph</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6"></div>
                             <div class="col-md-12 mt-4">
                                 <button class="btn btn-primary btn-lg float-right" onclick="simpan_asessmen()"
                                     type="button">Simpan</button>
@@ -595,6 +635,26 @@
                                                         <td style="vertical-align: top;"> : </td>
                                                         <td style="vertical-align: top;">
                                                             <span id="rmd_dmf"></span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td style="vertical-align: top;" width="22%">
+                                                            Jumlah Photo Yang Diambil
+                                                        </td>
+                                                        <td style="vertical-align: top;" width="2%"> : </td>
+                                                        <td style="vertical-align: top;">
+                                                            <span id="rmd_jum_photo"></span> (<span id="rmd_ket_jum_photo"></span>)
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="vertical-align: top;">
+                                                            Jumlah Rontgen Photo Yang Diambil
+                                                        </td>
+                                                        <td style="vertical-align: top;"> : </td>
+                                                        <td style="vertical-align: top;">
+                                                            <span id="rmd_jum_rontgen_photo"></span> (<span id="rmd_ket_jum_rontgen_photo"></span>)
                                                         </td>
                                                     </tr>
                                                 </table>

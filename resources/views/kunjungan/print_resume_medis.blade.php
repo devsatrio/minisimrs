@@ -197,6 +197,26 @@
                 </td>
             </tr>
         </table>
+        <table width="100%">
+            <tr>
+                <td style="vertical-align: top;" width="22%">
+                    Jumlah Photo Yang Diambil
+                </td>
+                <td style="vertical-align: top;" width="2%"> : </td>
+                <td style="vertical-align: top;">
+                    <span id="rmd_jum_photo"></span> (<span id="rmd_ket_jum_photo"></span>)
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top;">
+                    Jumlah Rontgen Photo Yang Diambil
+                </td>
+                <td style="vertical-align: top;"> : </td>
+                <td style="vertical-align: top;">
+                    <span id="rmd_jum_rontgen_photo"></span> (<span id="rmd_ket_jum_rontgen_photo"></span>)
+                </td>
+            </tr>
+        </table>
     </div>
     <table>
         <tr>
@@ -370,9 +390,9 @@
         get_resume_medis();
     });
     setTimeout(function() {
-        window.print();       // cetak halaman
+        window.print(); // cetak halaman
         setTimeout(function() {
-            window.close();   // tutup window setelah print
+            window.close(); // tutup window setelah print
         }, 500); // jeda 0.5 detik
     }, 800);
 
@@ -566,6 +586,10 @@
                         $('#rmd_lain_lain').html(val_od.lain_lain);
                         $('#rmd_dmf').html(val_od.input_d + ' ' + val_od.input_m + ' ' + val_od
                             .input_f);
+                    $('#rmd_jum_photo').html(val_od.jum_photo);
+                    $('#rmd_ket_jum_photo').html(val_od.ket_jum_photo);
+                    $('#rmd_jum_rontgen_photo').html(val_od.jum_photo_rongen);
+                    $('#rmd_ket_jum_rontgen_photo').html(val_od.ket_jum_photo_rongen);
                     });
 
                     $('#rmd_tindakan').html('<ul>' + list_tindakan + '</ul>');

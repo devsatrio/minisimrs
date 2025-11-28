@@ -57,6 +57,10 @@ class kunjunganController extends Controller
                 'input_d'=>$request->input_d,
                 'input_m'=>$request->input_m,
                 'input_f'=>$request->input_f,
+                'jum_photo'=>$request->jum_photo,
+                'ket_jum_photo'=>$request->ket_jum_photo,
+                'jum_photo_rongen'=>$request->jum_rontgen_photo,
+                'ket_jum_photo_rongen'=>$request->ket_jum_rontgen_photo,
                 'gambar_odontogram'=>$request->final_odontogram_arr,
                 'keterangan_odontogram'=>$request->data_odontogram,
             ]);
@@ -78,6 +82,10 @@ class kunjunganController extends Controller
                 'input_d'=>$request->input_d,
                 'input_m'=>$request->input_m,
                 'input_f'=>$request->input_f,
+                'jum_photo'=>$request->jum_photo,
+                'ket_jum_photo'=>$request->ket_jum_photo,
+                'jum_photo_rongen'=>$request->jum_rontgen_photo,
+                'ket_jum_photo_rongen'=>$request->ket_jum_rontgen_photo,
                 'gambar_odontogram'=>$request->final_odontogram_arr,
                 'keterangan_odontogram'=>$request->data_odontogram,
             ]);

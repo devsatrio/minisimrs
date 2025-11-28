@@ -389,6 +389,10 @@ function get_data_odontogram() {
                     $('#input_d').val(value.input_d);
                     $('#input_f').val(value.input_f);
                     $('#input_m').val(value.input_m);
+                    $('#jum_photo').val(value.jum_photo);
+                    $('#ket_jum_photo').val(value.ket_jum_photo);
+                    $('#jum_rontgen_photo').val(value.jum_photo_rongen);
+                    $('#ket_jum_rontgen_photo').val(value.ket_jum_photo_rongen);
                     $("#pills-pemeriksaan-odontogram-tab").removeClass("btn-secondary");
                     $("#pills-pemeriksaan-odontogram-tab").addClass("btn-success");
                 });
@@ -474,9 +478,9 @@ function get_resume_medis() {
                     $('#rmd_spo').html(val_pf.spo);
                 });
 
-                var list_tindakan ='';
+                var list_tindakan = '';
                 $.each(data.tindakan, function (key_t, val_t) {
-                    list_tindakan=list_tindakan+'<li>'+val_t.nama_tindakan+' x '+val_t.qty+'</li>';
+                    list_tindakan = list_tindakan + '<li>' + val_t.nama_tindakan + ' x ' + val_t.qty + '</li>';
                 });
                 $('#pills-resume-medis-tab').show();
                 $('#btn_cetak_resume').show();
@@ -506,10 +510,14 @@ function get_resume_medis() {
                     $('#rmd_diastema').html(diastema);
                     $('#rmd_gigi_anomali').html(val_gigi_anomali);
                     $('#rmd_lain_lain').html(val_od.lain_lain);
+                    $('#rmd_jum_photo').html(val_od.jum_photo);
+                    $('#rmd_ket_jum_photo').html(val_od.ket_jum_photo);
+                    $('#rmd_jum_rontgen_photo').html(val_od.jum_photo_rongen);
+                    $('#rmd_ket_jum_rontgen_photo').html(val_od.ket_jum_photo_rongen);
                     $('#rmd_dmf').html(val_od.input_d + ' ' + val_od.input_m + ' ' + val_od.input_f);
                 });
 
-                $('#rmd_tindakan').html('<ul>'+list_tindakan+'</ul>');
+                $('#rmd_tindakan').html('<ul>' + list_tindakan + '</ul>');
                 init_value_odontogram_resume(keterangan_odontogram);
                 init_odontogram_resume(value_odontogram);
             }
@@ -723,6 +731,10 @@ function simpan_asessmen() {
                             'input_d': $('#input_d').val(),
                             'input_m': $('#input_m').val(),
                             'input_f': $('#input_f').val(),
+                            'jum_photo': $('#jum_photo').val(),
+                            'ket_jum_photo': $('#ket_jum_photo').val(),
+                            'jum_rontgen_photo': $('#jum_rontgen_photo').val(),
+                            'ket_jum_rontgen_photo': $('#ket_jum_rontgen_photo').val(),
                             'final_odontogram_arr': JSON.stringify(final_odontogram_arr),
                             'data_odontogram': JSON.stringify(data_odontogram)
                         },
@@ -788,7 +800,13 @@ function simpan_pemeriksaan_fisik() {
         denyButtonText: `Don't save`
     }).then((result) => {
         if (result.value) {
-            if ($('#diagnosa').val() == '') {
+            if ($('#keluhan_utama').val() == ''
+                || $('#spo2').val() == ''
+                || $('#suhu').val() == ''
+                || $('#nadi').val() == ''
+                || $('#pernafasaan').val() == ''
+                || $('#sistolik').val() == ''
+                || $('#diastolik').val() == '') {
                 Swal.fire("Semua data harus diisi", "", "info");
             } else {
                 $.ajaxSetup({
